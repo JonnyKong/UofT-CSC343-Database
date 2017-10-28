@@ -1,0 +1,48 @@
+dbsrv1:~/csc343/UofT-CSC343-Database/A2/data$ psql csc343h-kongzhao
+psql (9.5.9, server 9.5.8)
+Type "help" for help.
+
+csc343h-kongzhao=> \i ddl.sql
+psql:ddl.sql:5: NOTICE:  drop cascades to type parlgov.election_type
+DROP SCHEMA
+CREATE SCHEMA
+SET
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TYPE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+COPY 5
+COPY 215
+COPY 289
+COPY 158
+COPY 729
+COPY 1404
+COPY 214
+COPY 107
+COPY 37
+ALTER TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+
+csc343h-kongzhao=> \i election2020.sql
+INSERT 0 5
+INSERT 0 1
+INSERT 0 5
+
+csc343h-kongzhao=> SELECT * FROM election_result WHERE id >= 30000;
+  id   | election_id | party_id | alliance_id | seats | votes | description
+-------+-------------+----------+-------------+-------+-------+-------------
+ 30000 |       20000 |    10000 |             |       |       |
+ 30001 |       20000 |    10001 |       30000 |       |       |
+ 30002 |       20000 |    10002 |       30000 |       |       |
+ 30003 |       20000 |    10003 |             |       |       |
+ 30004 |       20000 |    10004 |       30003 |       |       |
+(5 rows)
