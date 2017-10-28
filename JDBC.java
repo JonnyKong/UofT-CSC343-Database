@@ -1,23 +1,3 @@
-// A simple JDBC example.
-
-// Remember that you need to put the jdbc postgresql driver in your class path
-// when you run this code.
-// See /local/packages/jdbc-postgresql on cdf for the driver, another example
-// program, and a how-to file.
-
-// To compile and run this program on cdf:
-// (1) Compile the code in Example.java.
-//     javac Example
-// This creates the file Example.class.
-// (2) Run the code in Example.class.
-// Normally, you would run a Java program whose main method is in a class 
-// called Example as follows:
-//     java Example
-// But we need to also give the class path to where JDBC is, so we type:
-//     java -cp /local/packages/jdbc-postgresql/postgresql-9.4.1212.jar: Example
-// Alternatively, we can set our CLASSPATH variable in linux.  (See
-// /local/packages/jdbc-postgresql/HelloPostgresql.txt on cdf for how.)
-
 import java.sql.*;
 import java.io.*;
 
