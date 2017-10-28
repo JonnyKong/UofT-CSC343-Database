@@ -1,0 +1,48 @@
+dbsrv1:~/csc343/UofT-CSC343-Database$ psql csc343h-kongzhao
+psql (9.5.9, server 9.5.8)
+Type "help" for help.
+
+csc343h-kongzhao=> \i jelly-beans.sql
+CREATE TABLE
+INSERT 0 11
+
+csc343h-kongzhao=> \d
+          List of relations
+ Schema |  Name   | Type  |  Owner
+--------+---------+-------+----------
+ public | guesses | table | kongzhao
+(1 row)
+
+csc343h-kongzhao=> SELECT * FROM guesses;
+ number |   name    | guess | age
+--------+-----------+-------+-----
+      1 | Cole      |   365 |   5
+      2 | Avery     |   585 |   5
+      3 | Sam       |   502 |  12
+      4 | Madeleine |   511 |  18
+      5 | Cole      |   450 |   5
+      6 | Michael   |  1000 |  12
+      7 | Mackenzie |   700 |   5
+      8 | Mackenzie |   701 |   5
+      9 | Micah     |   498 |   4
+     10 | Jiaqi     |   509 |   4
+     11 | Jamieson  |   502 |   6
+(11 rows)
+csc343h-kongzhao=> \q
+
+dbsrv1:~/csc343/UofT-CSC343-Database$ javac JDBC.java
+
+dbsrv1:~/csc343/UofT-CSC343-Database$ java -cp /local/packages/jdbc-postgresql/postgresql-42.1.4.jar: JDBC
+Cole guessed 365
+Avery guessed 585
+Cole guessed 450
+Mackenzie guessed 700
+Mackenzie guessed 701
+Micah guessed 498
+Jiaqi guessed 509
+Jamieson guessed 502
+Inserted guesser number 12
+Look up who?
+Avery
+   Avery guessed 585
+Inserted guesser number 12
