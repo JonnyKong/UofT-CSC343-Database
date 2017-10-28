@@ -21,7 +21,7 @@
 import java.sql.*;
 import java.io.*;
 
-class Example {
+class JDBC {
     
     public static void main(String args[]) throws IOException
         {
