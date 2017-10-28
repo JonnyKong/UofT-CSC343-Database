@@ -1,0 +1,5 @@
+# Java compile files
+*.class
+
+# CDF system configurations
+HelloPostgresql.java
