@@ -47,3 +47,16 @@ Jiaqi
 Age Threshold: 
 6
 Average guess: 628
+All names:
+Cole
+Avery
+Sam
+Madeleine
+Cole
+Michael
+Mackenzie
+Mackenzie
+Micah
+Jiaqi
+Jamieson
+

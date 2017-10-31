@@ -89,7 +89,7 @@ class JDBC {
 		}
 
 		// Create array to store every name in the table
-		queryString = "SELECT COUNT(DISTINCT name) as cnt from guesses";
+		queryString = "SELECT COUNT(name) as cnt from guesses";
 		ps = conn.prepareStatement(queryString);
 		rs = ps.executeQuery();
 
@@ -100,7 +100,7 @@ class JDBC {
 		String[] myArray = new String[size];
 		
 		// Store name in new array
-		queryString = "SELECT DISTINCT name from guesses";
+		queryString = "SELECT name from guesses";
 		ps = conn.prepareStatement(queryString);
                 rs = ps.executeQuery();
 		System.out.println("All names:");
