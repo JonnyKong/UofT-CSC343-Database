@@ -32,7 +32,7 @@ csc343h-kongzhao=> \q
 
 dbsrv1:~/csc343/UofT-CSC343-Database$ javac JDBC.java
 
-dbsrv1:~/csc343/UofT-CSC343-Database$ java -cp /local/packages/jdbc-postgresql/postgresql-42.1.4.jar: JDBC
+dbsrv1:~/csc343/UofT-CSC343-Database/P8$ java -cp /local/packages/jdbc-postgresql/postgresql-42.1.4.jar: JDBC
 Cole guessed 365
 Avery guessed 585
 Cole guessed 450
@@ -41,8 +41,9 @@ Mackenzie guessed 701
 Micah guessed 498
 Jiaqi guessed 509
 Jamieson guessed 502
-Inserted guesser number 12
-Look up who?
-Avery
-   Avery guessed 585
-Inserted guesser number 12
+Look up who? 
+Jiaqi
+   Jiaqi guessed 509
+Age Threshold: 
+6
+Average guess: 628

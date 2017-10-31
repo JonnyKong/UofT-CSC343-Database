@@ -78,14 +78,14 @@ class JDBC {
 		// Prompt the user for an age, and print the average guess above
 		System.out.println("Age Threshold: ");          
 		int age = Integer.parseInt(System.console().readLine());
-		queryString = "SELECT AVERAGE(age) AS ave FROM guesses WHERE age >= ?";
+		queryString = "SELECT AVG(guess) AS ave FROM guesses WHERE age >= ?";
 		ps = conn.prepareStatement(queryString);
-		ps.setString(1, age);
+		ps.setInt(1, age);
 		rs = ps.executeQuery();
 
 		while(rs.next()) {
 		    int guess_average = rs.getInt("ave");
-		    System.out.println("Average guess: %d" + guess_average);
+		    System.out.println("Average guess: " + guess_average);
 		}	
 
             }
