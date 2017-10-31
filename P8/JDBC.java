@@ -86,7 +86,29 @@ class JDBC {
 		while(rs.next()) {
 		    int guess_average = rs.getInt("ave");
 		    System.out.println("Average guess: " + guess_average);
-		}	
+		}
+
+		// Create array to store every name in the table
+		queryString = "SELECT COUNT(DISTINCT name) as cnt from guesses";
+		ps = conn.prepareStatement(queryString);
+		rs = ps.executeQuery();
+
+		int size = 0;
+		while(rs.next()) {
+		    size = rs.getInt("cnt");
+		}
+		String[] myArray = new String[size];
+		
+		// Store name in new array
+		queryString = "SELECT DISTINCT name from guesses";
+		ps = conn.prepareStatement(queryString);
+                rs = ps.executeQuery();
+		System.out.println("All names:");
+		while(rs.next()) {
+			String name = rs.getString("name");
+			System.out.println(name);
+		}		
+	
 
             }
             catch (SQLException se)
