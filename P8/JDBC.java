@@ -50,7 +50,7 @@ class JDBC {
                 // The next query depends on user input, so we are wise to
                 // prepare it before inserting the user input.
                 queryString = "select guess from guesses where name = ?";
-		System.out.println("Inserted guesser number 12");
+		// System.out.println("Inserted guesser number 12");
 		PreparedStatement ps = conn.prepareStatement(queryString);
 
                 // Find out what string to use when looking up guesses.
@@ -70,10 +70,23 @@ class JDBC {
                 }
 		
 		// Insert guesser number 12
-		queryString = "INSERT INTO guesses VALUES (12, 'Jonny', 777, 7)";
-		pStatement = conn.prepareStatement(queryString);
-		pStatement.executeUpdate();
-		System.out.println("Inserted guesser number 12");                
+		// queryString = "INSERT INTO guesses VALUES (12, 'Jonny', 777, 7)";
+		// pStatement = conn.prepareStatement(queryString);
+		// pStatement.executeUpdate();
+		// System.out.println("Inserted guesser number 12");
+
+		// Prompt the user for an age, and print the average guess above
+		System.out.println("Age Threshold: ");          
+		int age = Integer.parseInt(System.console().readLine());
+		queryString = "SELECT AVERAGE(age) AS ave FROM guesses WHERE age >= ?";
+		ps = conn.prepareStatement(queryString);
+		ps.setString(1, age);
+		rs = ps.executeQuery();
+
+		while(rs.next()) {
+		    int guess_average = rs.getInt("ave");
+		    System.out.println("Average guess: %d" + guess_average);
+		}	
 
             }
             catch (SQLException se)
