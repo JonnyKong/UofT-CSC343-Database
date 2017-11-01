@@ -73,21 +73,21 @@ class Example {
 		System.out.println("Inserted guesser number 12");
 		PreparedStatement ps = conn.prepareStatement(queryString);
 
-                // Find out what string to use when looking up guesses.
-                BufferedReader br = new BufferedReader(new 
-                      InputStreamReader(System.in));
-                System.out.println("Look up who? ");
-                String who = br.readLine();
+        // Find out what string to use when looking up guesses.
+        BufferedReader br = new BufferedReader(new 
+                InputStreamReader(System.in));
+        System.out.println("Look up who? ");
+        String who = br.readLine();
 
-                // Insert that string into the PreparedStatement and execute it.
-                ps.setString(1, who);
-                rs = ps.executeQuery();
+        // Insert that string into the PreparedStatement and execute it.
+        ps.setString(1, who);
+        rs = ps.executeQuery();
 
-                // Iterate through the result set and report on each tuple.
-                while (rs.next()) {
-                    int guess = rs.getInt("guess");
-                    System.out.println("   " + who + " guessed " + guess);
-                }
+        // Iterate through the result set and report on each tuple.
+        while (rs.next()) {
+            int guess = rs.getInt("guess");
+            System.out.println("   " + who + " guessed " + guess);
+        }
 		
 		// Insert guesser number 12
 		queryString = "INSERT INTO guesses VALUES (12, 'Jonny', 777, 7)";

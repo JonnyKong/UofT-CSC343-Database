@@ -50,8 +50,8 @@ class JDBC {
                 // The next query depends on user input, so we are wise to
                 // prepare it before inserting the user input.
                 queryString = "select guess from guesses where name = ?";
-		// System.out.println("Inserted guesser number 12");
-		PreparedStatement ps = conn.prepareStatement(queryString);
+                // System.out.println("Inserted guesser number 12");
+                PreparedStatement ps = conn.prepareStatement(queryString);
 
                 // Find out what string to use when looking up guesses.
                 BufferedReader br = new BufferedReader(new 
@@ -69,54 +69,55 @@ class JDBC {
                     System.out.println("   " + who + " guessed " + guess);
                 }
 		
-		// Insert guesser number 12
-		// queryString = "INSERT INTO guesses VALUES (12, 'Jonny', 777, 7)";
-		// pStatement = conn.prepareStatement(queryString);
-		// pStatement.executeUpdate();
-		// System.out.println("Inserted guesser number 12");
+            // Insert guesser number 12
+            // queryString = "INSERT INTO guesses VALUES (12, 'Jonny', 777, 7)";
+            // pStatement = conn.prepareStatement(queryString);
+            // pStatement.executeUpdate();
+            // System.out.println("Inserted guesser number 12");
 
-		// Prompt the user for an age, and print the average guess above
-		System.out.println("Age Threshold: ");          
-		int age = Integer.parseInt(System.console().readLine());
-		queryString = "SELECT AVG(guess) AS ave FROM guesses WHERE age >= ?";
-		ps = conn.prepareStatement(queryString);
-		ps.setInt(1, age);
-		rs = ps.executeQuery();
+            // Prompt the user for an age, and print the average guess above
+            System.out.println("Age Threshold: ");          
+            int age = Integer.parseInt(System.console().readLine());
+            queryString = "SELECT AVG(guess) AS ave FROM guesses WHERE age >= ?";
+            ps = conn.prepareStatement(queryString);
+            ps.setInt(1, age);
+            rs = ps.executeQuery();
 
-		while(rs.next()) {
-		    int guess_average = rs.getInt("ave");
-		    System.out.println("Average guess: " + guess_average);
-		}
-
-		// Create array to store every name in the table
-		queryString = "SELECT COUNT(name) as cnt from guesses";
-		ps = conn.prepareStatement(queryString);
-		rs = ps.executeQuery();
-
-		int size = 0;
-		while(rs.next()) {
-		    size = rs.getInt("cnt");
-		}
-		String[] myArray = new String[size];
-		
-		// Store name in new array
-		queryString = "SELECT name from guesses";
-		ps = conn.prepareStatement(queryString);
-                rs = ps.executeQuery();
-		System.out.println("All names:");
-		while(rs.next()) {
-			String name = rs.getString("name");
-			System.out.println(name);
-		}		
-	
-
+            while(rs.next()) {
+                int guess_average = rs.getInt("ave");
+                System.out.println("Average guess: " + guess_average);
             }
-            catch (SQLException se)
-            {
-                System.err.println("SQL Exception." +
-                        "<Message>: " + se.getMessage());
+
+            // Create array to store every name in the table
+            queryString = "SELECT COUNT(name) as cnt from guesses";
+            ps = conn.prepareStatement(queryString);
+            rs = ps.executeQuery();
+
+            int size = 0;
+            while(rs.next()) {
+                size = rs.getInt("cnt");
             }
+            String[] myArray = new String[size];
+            
+            // Store name in new array
+            queryString = "SELECT name from guesses";
+            ps = conn.prepareStatement(queryString);
+            rs = ps.executeQuery();
+            System.out.println("All names:");
+            int i = 0;
+            while(rs.next()) {
+                String name = rs.getString("name");
+                myArray[i++] = name;
+                System.out.println(name);
+            }		
 
         }
+        catch (SQLException se)
+        {
+            System.err.println("SQL Exception." +
+                    "<Message>: " + se.getMessage());
+        }
+
+    }
         
 }
