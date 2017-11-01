@@ -1,0 +1,641 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage[normalem]{ulem}
+\usepackage{amstext}
+\usepackage{amsmath}
+\newcommand{\var}[1]{\mathit{#1}}
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+\noindent
+University of Toronto\\
+{\sc csc}343, Fall 2017\\[10pt]
+{\LARGE\bf Assignment 1:\hspace*{1cm}Yifan Fang \hspace*{2cm} 1002563825\\[5pt]
+\hspace*{5cm}        Zhaoning Kong \hspace*{0.7cm} 1004654288
+} \\[10pt]
+
+%\noindent
+%Unary operators on relations:
+%\begin{itemize}
+%\item $\Pi_{x, y, z} (R)$
+%\item $\sigma_{condition} (R) $
+%\item $\rho_{New} (R) $
+%\item $\rho_{New(a, b, c)} (R) $
+%\end{itemize}
+%Binary operators on relations:
+%\begin{itemize}
+%\item $R \times S$
+%\item $R \bowtie S$
+%\item $R \bowtie_{condition} S$
+%\item $R \cup S$
+%\item $R \cap S$
+%\item $R - S$
+%\end{itemize}
+%Logical operators:
+%\begin{itemize}
+%\item $\vee$
+%\item $\wedge$
+%\item $\neg$
+%\end{itemize}
+%Assignment:
+%\begin{itemize}
+%\item $New(a, b, c) := R$
+%\end{itemize}
+%Stacked subscripts:
+%\begin{itemize}
+%\item
+%$\sigma_{\substack{this.something > that.something \wedge \\ this.otherthing \leq that.otherthing}}$
+%\end{itemize}
+%
+%\noindent
+%Below is the text of the assignment questions; we suggest you include it in your solution.
+%We have also included a nonsense example of how a query might look in LaTeX.  
+%We used \verb|\var| in a couple of places to show what that looks like.  
+%If you leave it out, most of the time the algebra looks okay, but certain words,
+%{\it e.g.}, ``Offer" look horrific without it.
+%
+%The characters ``\verb|\\|" create a line break and ``[5pt]" puts in 
+%five points of extra vertical space.  The algebra is easier to read with extra
+%vertical space.
+%We chose ``--" to indicate comments, and added less vertical space between comments
+%and the algebra they pertain to than between steps in the algebra.
+%This helps the comments visually stick to the algebra.
+
+
+%----------------------------------------------------------------------------------------------------------------------
+\section*{Part 1: Queries}
+
+\begin{enumerate}
+
+\item   % ----------
+Find all the users who have never liked or viewed a post or story 
+of a user that they do {\it not} follow. 
+Report their user id and ``about" information. 
+Put the information into a relation with attributes ``username'' and ``description''. \\
+
+{\large %This increase in font size makes the subscripts much more readable.
+%-- sID has a grade of at least 85. \\[5pt]
+%$
+%HaveHighGrade(\var{sID}) := 
+%	\Pi_{sID} 
+%	\sigma_{grade \ge 85} 
+%	Took \\[10pt]
+%$
+%-- sID passed a course taught by Atwood. \\[5pt]
+%$
+%PassedAtwood(\var{sID}) := 
+%	\Pi_{\var{sID}} 
+%	\sigma_{instructor := ``Atwood" \wedge grade \ge 50} 
+%	(Took \bowtie \var{Offering}) 
+%	\\[10pt]
+%$
+%-- sID got 100 at least twice. \\[5pt]
+%$
+%AtLeastTwice(\var{sID}) := \\[5pt]  %This RA statement is too long, so we break it into two lines.
+%	\hspace*{1cm}  % This command creates an indentation
+%	\Pi_{T1.\var{sID}} 
+%	\sigma_{
+%		T1.\var{oID} \neq T2.\var{oID} \wedge 
+%		T1.\var{sID} = T2.\var{sID} \wedge 
+%		T1.grade = 100 \wedge T2.grade = 100}
+%	[ (\rho_{T1}Took) \times (\rho_{T2}Took) ] \\[5pt]
+%$
+
+-- The pair of Uids of users who sent a like and who received this like. \\[5pt]
+$
+LikerAndReceiver(\var{likerUid, receiverUid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{Likes.liker, Post.uid}
+	(Likes \bowtie_{Likes.pid = Post.pid} Post) \\[10pt]
+$
+-- The pair of Uids selected from the relation above when the liker followed the receiver. \\[5pt]
+$
+LikesFromFollower(\var{likerUid, receiverUid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{likerUid, receiverUid}
+	(LikerAndReceiver \bowtie_{\substack{LikerAndReceiver.likerUid = Follows.follower \wedge \\ LikerAndReceiver.receiverUid = Follows.followed}} Follows) \\[10pt]
+$
+-- UID of users who liked someone he/she didn't follow. \\[5pt]
+$
+UidLikedUnfollowed(\var{uid}) := 
+	\Pi_{likerUid}
+	(LikerAndReceiver - LikesFromFollower) \\[10pt]
+$
+-- UID of users who never liked someone he/she didn't follow. \\[5pt]
+$
+UidNotLikedUnfollowed(\var{uid}) :=
+	(\Pi_{uid} Users) - UidLikedUnfollowed \\[10pt]
+$
+-- The pair of Uids of users who view a story and who post this story. \\[5pt]
+$
+ViewerAndPoster(\var{viewerUid, posterUid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{Saw.viewerid, Story.uid}
+	(Saw \bowtie_{Saw.sid = Story.sid} Story) \\[10pt]
+$
+-- The pair of Uids selected from the relation above when the viewer followed the poster. \\[5pt]
+$
+ViewsFromFollower(\var{viewerUid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{viewerUid, posterUid}
+	\sigma_{\substack{ViewerAndPoster.viewerUid = Follows.follower \wedge \\ ViewerAndPoster.posterUid = Follows.followed}}
+	(ViewerAndPoster \bowtie Follows) \\[10pt]
+$
+-- UID of users who viewed story of someone he/she didn't follow. \\[5pt]
+$
+UidViewedUnfollowed(\var{uid}) :=
+	\Pi_{viewerUid} (ViewerAndPoster - ViewsFromFollower) \\[10pt]
+$
+-- UID of users who never viewed story of someone he/she didn't follow. \\[5pt]
+$
+UidNotViewedUnfollowed(\var{uid}) :=
+	(\Pi_{uid} Users) - UidViewedUnfollowed \\[10pt]
+$
+-- Uid and ``About'' Info of such users. \\[5pt]
+$
+Answer(\var{username, description}) := \\[10pt]
+	\hspace*{1cm}
+	\Pi_{User.uid, User.about}
+	((UidNotLikedUnfollowed \cup UidNotViewedUnfollowed) \bowtie User)
+$
+} % End of font size increase.
+
+
+\item   % ----------
+Find every hashtag that has been mentioned in at least three post captions
+on every day of 2017.
+You may assume that there is at least one post on each day of a year. \\
+
+{\large
+-- Hashtags appeared on specific dates of 2017. \\[5pt]
+$
+TagWithDate(\var{tag, when}) := 
+	\Pi_{tag, when}
+	\sigma_{when.year = 2017}
+	(Hashtag \bowtie Post)
+$ \\[10pt]
+-- Hashtags appeared 3+ times on specific dates of 2017. \\[5pt]
+$
+TagAtLeastThreeOneDay(\var{tag, when}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{tag, when}
+	\sigma_{\substack{H1.date=H2.date \wedge \\ H2.date=H3.date \wedge \\ H1.pid < H2.pid \wedge \\ H2.pid < H3.pid}}
+	(\rho_{H1}TagWithDate \times \rho_{H1}TagWithDate \times \rho_{H1}TagWithDate) \\[10pt]
+$
+--Hashtags appeared 1 or 2 times on some date of 2017. \\[5pt]
+$
+TagLessThanThreeOneDay(\var{tag, when}) := 
+	TagWithDate - TagAtLeastThreeOneDay \\[10pt]
+$
+-- Hashtag mentioned in at least three post captions on every day of 2017. \\[5pt]
+$
+Answer(\var{tag}) :=
+	(\Pi_{tag} (TagWithDate)) - (\Pi_{tag} (TagLessThanThreeOneDay)) \\[10pt]
+$
+}
+
+\item   % ----------	
+Let's say that a pair of users are ``reciprocal followers" if they follow each other. 
+For each pair of reciprocal followers, 
+find all of their ``uncommon followers": 
+users who follow one of them but not the other. 
+Report one row for each of the pair's uncommon follower.
+In it, include
+the identifiers of the reciprocal followers,
+and the identifier, name and email of the uncommon follower.\\
+
+{\large
+-- Reciprocal users without order. \\[5pt]
+$
+Reciprocal(\var{userA, userB}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{F1.follower, F1.followed}
+	\sigma_{\substack{F1.follower = F2.followed \wedge \\ F1.followed = F2.follower \wedge \\ F1.follower < F1.followed}}
+	(\rho_{F1} Follower \times \rho_{F2} Follower) \\[10pt]
+$
+-- For each pair of reciprocal users, a third user follows one of them or both. \\[5pt]
+$
+FollowOneOrBoth(\var{userA, userB, userC}) := 
+	\Pi_{R.follower, R.followed, F1.follower} \\[5pt]
+	\hspace*{1cm}
+	\sigma{\substack{F1.follower=F2.follower \wedge \\ (F1.followed=R.userA \vee \\ F2.followed=R.userB) \wedge \\ F1.follower \neq R.userB \wedge \\ F2.follower \neq R.userA}}
+	(\rho_{R} Reciprocal \times \rho_{F1} Follows \times \rho_{F2} Follows) \\[10pt]
+$
+-- For each pair of reciprocal users, a third user follows both of them. \\[5pt]
+$
+FollowBoth(\var{userA, userB, userC}) := 
+	\Pi_{R.follower, R.followed, F1.follower} \\[5pt]
+	\hspace*{1cm}
+	\sigma{\substack{F1.follower=F2.follower \wedge \\ F1.followed=R.userA \wedge \\ F2.followed=R.userB \wedge \\ F1.follower \neq R.userB \wedge \\ F2.follower \neq R.userA}}
+	(\rho_{R} Reciprocal \times \rho_{F1} Follows \times \rho_{F2} Follows) \\[10pt]
+$
+-- For each pair of reciprocal users, a third user follow one of them, but not both. \\[5pt]
+$
+Answer(\var{recA, recB, uncommon, name, email}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{userA, userB, userC, name, email}
+	((FollowOneOrBoth - FollowBoth) \bowtie_{userc=uid} User) \\[10pt]
+$
+}
+
+\item   % ---------- 
+Find the user who has liked the most posts. 
+Report the user's id, name and email, and the id of the posts they have liked. 
+If there is a tie, report them all. \\[5pt]
+{\large
+Cannot be expressed. \\[10pt]
+}
+
+
+\item   % ----------
+Let's say a pair of users are ``backscratchers" 
+if they follow each other and like all of each others' posts. 
+Report the user id of all users who follow some pair of backscratcher users.\\
+
+{\large
+-- Relation including pid and uid of poster and uid of liker. \\[5pt]
+$
+PostWithLikerUid(\var{pid, posterUid, likerUid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{Post.pid, Post.uid, Likes.liker}
+	(Post \bowtie_{Post.pid=Likes.pid} Likes) \\[10pt]
+$
+-- Relation including pid and uid of poster and uid of all followers of this poster. \\[5pt]
+$
+PostWithFollowerUid(\var{pid, posterUid, followerUid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{pid, posterUid, follower}
+	(PostWithLikerUid \bowtie_{posterUid=followed} Follows) \\[10pt]
+$
+-- uid with all of the followers' uid who do not like all his/her posts\\[5pt]
+$
+UidWithNotQualifiedFollowerUid(\var{posterUid, followerUid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{posterUid, followerUid}
+	(PostWithFollowerUid - \rho_{P(pid, posterUid, followerUid)} PostWithLikerUid) \\[10pt]
+$
+-- Relation including uid and all his/her followers' uid. \\[5pt]
+$
+AllFollowed(\var{uid, follower}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{User.uid, Follows.follower}
+	(User \bowtie_{User.uid=Follows.followed} Follows) \\[10pt]
+$
+-- uid with all of the followers' uid who like all his/her posts\\[5pt]
+$
+UidWithQualifiedFollowerUid(\var{uid, followerUid}) := \\[5pt]
+	\hspace*{1cm}
+	AllFollowed - UidWithNotQualifiedFollowerUid \\[10pt]
+$
+-- Self join the relation above, the result is the ``Backscratchers''. \\[5pt]
+$
+Backscratchers(\var{buid1, buid2}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{U1.uid, U2.uid}
+	\sigma_{\substack{U1.uid = U2.followerUid \wedge U1.followerUid = U2.uid \wedge U1.uid > U2.uid}}\\
+	\hspace*{2cm}
+	(\rho_{U1} UidWithQualifiedFollowerUid \times \rho_{U2} UidWithQualifiedFollowerUid) \\[10pt]
+$
+-- uid of all users who follow some pair of backscratcher users. \\[5pt]
+$
+Answer(\var{uid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{A1.follower}
+	\sigma_{\substack{A1.follower=A2.follower \wedge \\ A1.uid=B.buid1 \wedge \\ A2.uid=B.buid2}}
+	(\rho_{B} Backscratchers \times \rho_{A1} AllFollowed \times \rho_{A2} AllFollowed) \\[10pt]
+$
+}
+
+\item   % ----------
+The ``most recent activity" of a user is his or her latest story or post. 
+The ``most recently active user" is the user whose most recent activity
+occurred most recently.
+
+Report the name of every user,
+and for the most recently active user they follow,
+report their name and email, and the date of their most-recent activity.
+If there is a tie for the most recently active user that a user follows,
+report a row for each of them.\\
+
+{\large
+-- uid of user and time of his/her all posts and stories. \\[5pt]
+$
+UidAndTime(\var{uid, when}):= 
+	\Pi_{uid, when} Post \cup \Pi_{uid, when} Story \\[10pt]
+$
+-- All posts with uid of the poster, and uid of all followers of that poster. \\[5pt]
+$
+C(\var{follower, followed, when}) := \\[5pt]
+	\hspace*{1cm}	
+	\Pi_{F.follower, F.followed, U.when}
+	\sigma_{F.followed=U.uid}
+	(\rho_{F} Follows \bowtie \rho_{U} UidAndTime) \\[10pt]
+$
+-- Time of posts that are not most recent for each pair of users. \\[5pt]
+$
+NotMostRecentPosts(\var{follower, followed, when}) := \\[5pt]
+	\hspace*{1cm}	
+	\Pi_{C1.follower, C2.followed, C2.date}
+	\sigma_{\substack{C1.follower=C2.follower \wedge \\ C1.when>C2.when}}
+	(\rho_{C1} C \times \rho_{C2} C) \\[10pt]
+$
+-- Most recent user(s) for each user, and date of most-recent activity. \\[5pt]
+$
+MostRecentUser(\var{follower, followed, when}) :=
+	C - NotMostRecentPosts \\[10pt]
+$
+-- Most recent user(s) for each user, their name, email and date of most-recent activity. \\[5pt]
+$
+Answer(\var{follower, mostRecentUid, name, email, when}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{U1.name, M.followed, U2.name, U2.email, M.when}
+	\sigma_{\substack{M.follower = U1.uid \wedge M.followed=U2.uid}} \\[5pt]
+	\hspace*{1cm}
+	(\rho_{M} MostRecentUser \times \rho_{U1} User \times \rho_{U2} User) \\[10pt]
+$
+}
+
+\item   % ----------
+Find the users who have always liked posts
+in the same order as the order in which they were posted,
+that is,
+users for whom the following is true:
+if they liked $n$ different posts (posts of any users)
+and
+$$[post\_date\_1] < [post\_date\_2] < ... < [post\_date\_n]$$
+where $post\_date\_i$ is the date on which a post $i$ was posted, 
+then it holds that
+$$[like\_date\_1] < [like\_date\_2] < ... < [like\_date\_n]$$ 
+where $like\_date\_i$ is the date on which the post $i$ was liked 
+by the user.  
+Report the user's name and email. \\
+
+{\large
+-- A relation representing user liker liked post pid posted at posttime at likestime. \\[5pt]
+$
+Likespost(\var{liker, pid, likestime, posttime}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{Likes.liker, Post.pid, Likes.when, Post.when}
+	(Likes \bowtie_{Likes.pid=Posts.pid} Post) \\[10 pt]
+$
+-- uid of users who didn't like posts in order they were posted. \\[5pt]
+$
+uidNotOrder(\var{uid}) :=
+	\Pi_{L1.uid}
+	\sigma_{\substack{L1.uid = L2.uid \wedge \\ L1.likestime > L2.likestime \wedge \\ L1.posttime < L2.posttime}}
+	(\rho_{L1} Likespost \times \rho_{L2} Likespost) \\[10pt]
+$
+-- uid of users who always liked posts in order they were posted. \\[5pt]
+$
+uidInOrder(\var{uid}) := 
+	(\Pi_{uid} User) - uidNotOrder. \\[10pt]
+$
+-- Name and email of such user. \\[5pt]
+$
+Answer(\var{name, email}) := 
+	\Pi_{User.name, User.email}
+	(uidInOrder \bowtie User) \\[10pt]
+$
+}
+
+\item   % ----------
+Report the name and email of the user
+who has gained the greatest number of new followers in 2017. 
+If there is a tie, report them all. \\
+
+{\large
+Cannot be expressed. \\[10pt]
+}
+
+\item   % ----------
+For each user who has ever viewed any story, 
+	report their id and the id of the first and of the last story they have seen.
+If there is a tie for the first story seen, report both;
+if there is a tie for the last story seen, report both.
+This means that a user could have up to 4 rows in the resulting relation. \\
+
+{\large
+-- For each user, the sid of stories except for the last he/she have seen. \\[5pt]
+$
+NotLast(\var{viewerid, sid}) :=
+	\Pi_{S1.viewerid, S2.sid}
+	\sigma_{\substack{S1.viewerid = S2.viewerid \wedge \\ S1.when > S2.when}}
+	(\rho_{S1} Saw \times \rho_{S2} Saw) \\[10pt]
+$
+-- For each user, the sid of last stories he/she have seen. \\[5pt]
+$
+Last(\var{viewerid, sid}) := 
+	(\Pi_{viewerid, sid} Saw) - NotLast; \\[10pt]
+$
+-- For each user, the sid of stories except for the first he/she have seen. \\[5pt]
+$
+NotFirst(\var{viewerid, sid}) :=
+	\Pi_{S1.viewerid, S2.sid}
+	\sigma_{\substack{S1.viewerid = S2.viewerid \wedge \\ S1.when < S2.when}}
+	(\rho_{S1} Saw \times \rho_{S2} Saw) \\[10pt]
+$
+-- For each user, the sid of first stories he/she have seen. \\[5pt]
+$
+First(\var{viewerid, sid}) := 
+	(\Pi_{viewerid, sid} Saw) - NotFirst; \\[10pt]
+$
+-- For each user, his/her uid and sid of first and last stories they have seen. \\[5pt]
+$
+Answer(\var{viewerid, sid}) := 
+	First \cup Last. \\[10pt]	
+$
+}
+
+\item   % ----------
+A comment is said to have either positive or negative sentiment
+based on the presence of words such as ``like,'' ``love,'' ``dislike,'' and ``hate.'' 
+A ``sentiment shift" in the comments on a post occurs at moment $m$ iff
+all comments on that post before $m$ have positive sentiment, 
+while all comments on that post after $m$ have negative sentiment ---
+or the other way around, with comments shifting from negative to positive sentiment.
+
+Find posts that have at least three comments and for which there has been a sentiment shift over time. 
+For each post, report the user who owns it and,
+for each comment on the post,
+the commenter's id, 
+the date of their comment and its sentiment.
+
+You may assume there is a function, called {\it sentiment}
+that can be applied to a comment's text and 
+returns the sentiment of the comment as a string with the value ``positive" or ``negative".
+For example,
+you may refer to $sentiment(text)$ in the condition of a select operator.\\
+
+{\large
+-- A relation including pid, uid from who comments, and the text and time of the comment. \\[10pt]
+$
+AllCommentsWithPid(\var{pid, commenterID, text, when}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{Post.pid, C.commenter, C.text, C.when}
+	(\rho_{C} Comment \bowtie_{C.pid = Post.pid} Post) \\[10pt]
+$
+-- A relation selected from above where the comments are not the earliest positive comments for each post. \\[5pt]
+$
+NotEarliestPositive(\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{A2.pid, A2.commenterID, A2.when} \\
+	\hspace*{1cm}
+	\sigma_{\substack{sentiment(A1.text)="positive" \wedge \\ sentiment(A2.text)="positive" \wedge \\A1.pid = A2.pid \wedge \\ A1.when < A2.when}}
+	(\rho_{A1} AllCommentsWithPid \times \rho_{A2} AllCommentsWithPid) \\[10pt]
+$
+-- The earliest positive comment for each post. \\[5pt]
+$
+EarliestPositive(\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	(\Pi_{pid, commenterID, when}
+	\sigma_{sentiment(text) = "positive"}
+	AllCommentsWithPid) - \\
+	\hspace*{1cm}
+	NotEarliestPositive \\[10pt]
+$
+-- A relation selected from the first step where the comments are not the latest negative comments for each post. \\[5pt]
+$
+NotLatestNegative(\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{A2.pid, A2.commenterID, A2.when} \\
+	\hspace*{1cm}
+	\sigma_{\substack{sentiment(A1.text)="negative" \wedge \\ sentiment(A2.text)="negative" \wedge \\A1.pid = A2.pid \wedge \\ A1.when > A2.when}}
+	(\rho_{A1} AllCommentsWithPid \times \rho_{A2} AllCommentsWithPid) \\[10pt]
+$
+-- The latest negative comment for each post. \\[5pt]
+$
+LatestNegative(\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	(\Pi_{pid, commenterID, when}
+	\sigma_{sentiment(text) = "negative"}
+	AllCommentsWithPid) - \\
+	\hspace*{1cm}
+	NotLatestNegative \\[10pt]
+$
+-- pid of all post having a sentiment shift from negative to positive. \\[5pt]
+$
+AllFromNegativeToPositive(\var{pid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{EP.pid}
+	\sigma_{EP.pid=LN.pid \wedge EP.when > LN.when}
+	(\rho_{EP} EarliestPositive \times \rho_{LN} LatestNegative) \\[10pt]
+$
+-- A relation selected from the first step where the comments are not the earliest negative comments for each post. \\[5pt]
+$
+NotEarliestNegative(\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{A2.pid, A2.commenterID, A2.when} \\
+	\hspace*{1cm}
+	\sigma_{\substack{sentiment(A1.text)="negative" \wedge \\ sentiment(A2.text)="negative" \wedge \\A1.pid = A2.pid \wedge \\ A1.when < A2.when}}
+	(\rho_{A1} AllCommentsWithPid \times \rho_{A2} AllCommentsWithPid) \\[10pt]
+$
+-- The earliest negative comment for each post. \\[5pt]
+$
+EarliestNegative\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	(\Pi_{pid, commenterID, when}
+	\sigma_{sentiment(text) = "negative"}
+	AllCommentsWithPid) - \\
+	\hspace*{1cm}
+	NotEarliestNegative \\[10pt]
+$
+-- A relation selected from the first step where the comments are not the latest positive comments for each post. \\[5pt]
+$
+NotLatestPositive(\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{A2.pid, A2.commenterID, A2.when} \\
+	\hspace*{1cm}
+	\sigma_{\substack{sentiment(A1.text)="positive" \wedge \\ sentiment(A2.text)="positive" \wedge \\A1.pid = A2.pid \wedge \\ A1.when > A2.when}}
+	(\rho_{A1} AllCommentsWithPid \times \rho_{A2} AllCommentsWithPid) \\[10pt]
+$
+-- The latest positive comment for each post. \\[5pt]
+$
+LatestNegative(\var{pid, commenterID, when}) := \\[5pt]
+	\hspace*{1cm}
+	(\Pi_{pid, commenterID, when}
+	\sigma_{sentiment(text) = "positive"}
+	AllCommentsWithPid) - \\
+	\hspace*{1cm}
+	NotLatestPositive \\[10pt]
+$
+-- pid of all post having a sentiment shift from positive to negative. \\[5pt]
+$
+AllFromPositiveToNegative(\var{pid}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{EN.pid}
+	\sigma_{EN.pid=LP.pid \wedge EN.when > LP.when}
+	(\rho_{EN} EarliestNegative \times \rho_{LP} LatestPositive) \\[10pt]
+$
+
+-- All the posts which have a sentiment shift, with its uid who owns it, each comment on the post, the commenter’s id, the date of their comment and its sentiment. \\[5pt]
+$
+Answer(\var{pid, uid, commenterID, when, sentiment}) := \\[5pt]
+	\hspace*{1cm}
+	\Pi_{Post.pid, Post.uid, Comment.commenter, Comment.when, sentiment(text)} \\
+	\hspace*{1cm}
+	[(AllFromNegativeToPositive \cup AllFromPositiveToNegative) \bowtie \\ 
+	\hspace*{1cm}
+	(Comment \bowtie_{Comment.pid = Post.pid} Post)]
+$
+}
+
+\end{enumerate}
+
+
+
+%----------------------------------------------------------------------------------------------------------------------
+\section*{Part 2: Additional Integrity Constraints}
+
+
+Express the following integrity constraints
+with the notation $R = \emptyset$, where $R$ is an expression of relational algebra. 
+You are welcome to define intermediate results with assignment
+and then use them in an integrity constraint.
+
+\begin{enumerate}
+
+\item   % ----------
+A comment on a post must occur after the date-time of the post itself.
+(Remember that you can compare two date-time attributes with simple $<$,
+$>=$ etc.) \\
+
+{\large
+$
+	\sigma_{Post.when > Comment.when}
+	(Post \bowtie_{Post.pid = Comment.pid} Comment) = \emptyset \\[10pt]
+$
+}
+
+\item %---------
+Each user can have at most one current story. \\
+
+{\large
+$	
+	\sigma_{\substack{S1.uid = S2.uid \wedge S1.sid > S2.sid \wedge \\ S1.current = "yes" \wedge S2.current = "yes"}}
+	(\rho_{S1} Story \times \rho_{S2} Story) = \emptyset \\[10pt]
+$
+}
+
+\item %----------
+Every post must include at least one picture or one video and so must every story. \\
+
+{\large
+-- All pid of posts that does not have a photo or video. \\[5pt]
+$
+UnqualifiedPost(\var{ID}) := 
+	(\Pi_{pid} Posts) - (\Pi_{pid} PIncludes) \\[10pt]
+$	
+-- All sid of stories that does not have a photo or video. \\[5pt]
+$
+UnqualifiedStory(\var{ID}) := 
+	(\Pi_{sid} Story) - (\Pi_{pid} SIncludes) \\[10pt]
+$
+$
+UnqualifiedPost \cup UnqualifiedStory = \emptyset \\[10pt]
+$
+}
+
+\end{enumerate}
+
+\end{document}
