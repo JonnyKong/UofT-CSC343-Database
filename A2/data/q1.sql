@@ -31,15 +31,11 @@ FROM election;
 -- GROUP BY year, country and party
 CREATE VIEW grouped
 SELECT EXTRACT(year FROM e_date) AS year, country_id, party_id, 
-	SUM(votes) / votes_total
-	AS vote_range
+	COALESCE((SUM(votes) / votes_total), 0) AS vote_range
 FROM election_result, election_full
 WHERE election_result.election_id = election_full.id
 	AND e_date >= '1996-01-01' AND e_date <= '2016-12-31'
 GROUP BY EXTRACT(year FROM e_date), country_id, party_id;
-
--- NULL votes set to 0
-UPDATE grouped SET vote_range = 0 WHERE vote_range IS NULL;
 
 
 -- the answer to the query 
