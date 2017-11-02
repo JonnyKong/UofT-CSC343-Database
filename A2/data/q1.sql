@@ -35,8 +35,9 @@ WHERE election_result.election_id = election_full.id
 	AND e_date >= '1996-01-01' AND e_date <= '2016-12-31'
 GROUP BY election_full.id, country_id, party_id;
 
+-- Average all elections in this year
 CREATE VIEW grouped AS
-SELECT AVG(vote_range)
+SELECT EXTRACT(year FROM e_date) AS year, country_id, party_id, AVG(vote_range) AS vote_range
 FROM groupedByElection
 GROUP BY EXTRACT(year FROM e_date), country_id, party_id;
 
@@ -52,4 +53,6 @@ GROUP BY EXTRACT(year FROM e_date), country_id, party_id;
 
 -- the answer to the query 
 --insert into q1 
-
+SELECT grouped.year, country.name, party.name, grouped.vote_range
+FROM grouped, country, party
+WHERE grouped.country_id = country.id AND grouped.party_id = party.id;
