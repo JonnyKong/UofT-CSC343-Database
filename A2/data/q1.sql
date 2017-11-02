@@ -39,7 +39,7 @@ WHERE election_result.election_id = election_full.id
 GROUP BY EXTRACT(year FROM e_date), country_id, party_id;
 
 -- NULL votes set to 0
-UPDATE VIEW grouped SET vote_range = 0 WHERE vote_range IS NULL;
+UPDATE grouped SET vote_range = 0 WHERE vote_range IS NULL;
 
 
 -- the answer to the query 
