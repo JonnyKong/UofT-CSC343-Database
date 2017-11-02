@@ -29,7 +29,7 @@ SELECT id, country_id, e_date,
 FROM election;
 
 CREATE VIEW groupedByElection AS
-SELECT e_date, country_id, party_id, COALESCE((SUM(votes) / MAX(votes_total)), 0) AS vote_range
+SELECT MAX(e_date), country_id, party_id, COALESCE((SUM(votes) / MAX(votes_total)), 0) AS vote_range
 FROM election_result, election_full
 WHERE election_result.election_id = election_full.id
 	AND e_date >= '1996-01-01' AND e_date <= '2016-12-31'
