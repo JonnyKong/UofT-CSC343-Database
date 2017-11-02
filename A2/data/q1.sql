@@ -34,8 +34,7 @@ SELECT EXTRACT(year FROM e_date), country_id, party_id, SUM(votes) / SUM(votes_t
 FROM election_result, election_full
 WHERE election_result.election_id = election_full.id
 	AND e_date >= '1996-01-01' AND e_date <= '2016-12-31'
-GROUP BY EXTRACT(year FROM e_date), country_id, party_id
-HAVING voteRange <= 0.05;
+GROUP BY EXTRACT(year FROM e_date), country_id, party_id;
 
 
 
