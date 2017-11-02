@@ -29,7 +29,7 @@ SELECT id, country_id, e_date,
 FROM election;
 
 -- GROUP BY year, country and party
-CREATE VIEW grouped
+CREATE VIEW grouped AS
 SELECT EXTRACT(year FROM e_date) AS year, country_id, party_id, 
 	COALESCE((SUM(votes) / votes_total), 0) AS vote_range
 FROM election_result, election_full
