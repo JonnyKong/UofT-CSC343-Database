@@ -32,7 +32,7 @@ FROM election;
 -- GROUP BY year, country and party
 SELECT EXTRACT(year FROM e_date) AS year, country_id, party_id, 
 	(CASE WHEN SUM(votes) IS NOT NULL THEN SUM(votes)	-- NULL in election_result.votes counts as 0
-		WHEN SUM(votes) IS NULL THEN 0)
+		WHEN SUM(votes) IS NULL THEN '0')
 	/ SUM(votes_total) AS vote_range
 FROM election_result, election_full
 WHERE election_result.election_id = election_full.id
