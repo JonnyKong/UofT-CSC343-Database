@@ -20,7 +20,7 @@ DROP VIEW IF EXISTS intermediate_step CASCADE;
 -- Define views for your intermediate steps here.
 CREATE VIEW election_full AS
 SELECT e_date, 
-	countryid,
+	country_id,
 	(CASE WHEN votes_valid IS NOT NULL THEN votes_valid
 		 WHEN votes_valid IS NULL THEN (SELECT SUM(votes) FROM election_result where election_result.election_id = election.id)
 	END) AS votes_total
