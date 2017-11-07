@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Set;
@@ -7,10 +8,11 @@ public abstract class JDBCSubmission {
     /**
      * The return class for method electionSequence.
      */
-    public class ElectionCabinetResult {
-        public List<String> elections;
-        public List<String> cabinets;
-        public ElectionCabinetResult(List<String> elections, List<String> cabinets) {
+    
+    public static class ElectionCabinetResult implements Serializable {
+        public List<Integer> elections;
+        public List<Integer> cabinets;
+        public ElectionCabinetResult(List<Integer> elections, List<Integer> cabinets) {
             this.elections = elections;
             this.cabinets = cabinets;
         }
@@ -21,7 +23,11 @@ public abstract class JDBCSubmission {
             }
             ElectionCabinetResult other = (ElectionCabinetResult) obj;
             return this.elections.equals(other.elections) &&
-                   this.cabinets.equals(other.cabinets) &&
+                   this.cabinets.equals(other.cabinets);
+        }
+        @Override
+        public String toString() {
+            return "e: " + this.elections.toString() + " c: " + this.cabinets.toString();
         }
     }
 
@@ -108,6 +114,6 @@ public abstract class JDBCSubmission {
      * @return                  a list of politicians with Jaccard similarity of
      *                          comments and descriptions above the given threshold
      */
-    public abstract List<String> findSimilarPoliticians(int politicianId, float threshold);
+    public abstract List<Integer> findSimilarPoliticians(Integer politicianId, Float threshold);
 
 }
