@@ -70,30 +70,30 @@ class Example {
                 // The next query depends on user input, so we are wise to
                 // prepare it before inserting the user input.
                 queryString = "select guess from guesses where name = ?";
-		System.out.println("Inserted guesser number 12");
-		PreparedStatement ps = conn.prepareStatement(queryString);
+                System.out.println("Inserted guesser number 12");
+                PreparedStatement ps = conn.prepareStatement(queryString);
 
-        // Find out what string to use when looking up guesses.
-        BufferedReader br = new BufferedReader(new 
-                InputStreamReader(System.in));
-        System.out.println("Look up who? ");
-        String who = br.readLine();
+                // Find out what string to use when looking up guesses.
+                BufferedReader br = new BufferedReader(new 
+                        InputStreamReader(System.in));
+                System.out.println("Look up who? ");
+                String who = br.readLine();
 
-        // Insert that string into the PreparedStatement and execute it.
-        ps.setString(1, who);
-        rs = ps.executeQuery();
+                // Insert that string into the PreparedStatement and execute it.
+                ps.setString(1, who);
+                rs = ps.executeQuery();
 
-        // Iterate through the result set and report on each tuple.
-        while (rs.next()) {
-            int guess = rs.getInt("guess");
-            System.out.println("   " + who + " guessed " + guess);
-        }
-		
-		// Insert guesser number 12
-		queryString = "INSERT INTO guesses VALUES (12, 'Jonny', 777, 7)";
-		pStatement = conn.prepareStatement(queryString);
-		pStatement.executeUpdate();
-		System.out.println("Inserted guesser number 12");                
+                // Iterate through the result set and report on each tuple.
+                while (rs.next()) {
+                    int guess = rs.getInt("guess");
+                    System.out.println("   " + who + " guessed " + guess);
+                }
+                
+                // Insert guesser number 12
+                queryString = "INSERT INTO guesses VALUES (12, 'Jonny', 777, 7)";
+                pStatement = conn.prepareStatement(queryString);
+                pStatement.executeUpdate();
+                System.out.println("Inserted guesser number 12");                
 
             }
             catch (SQLException se)
