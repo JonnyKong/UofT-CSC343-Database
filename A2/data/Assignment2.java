@@ -23,7 +23,7 @@ public class Assignment2 extends JDBCSubmission {
         } catch(SQLException se) {
             return false;
         }
-        System.out.println("Connected to database");
+        // System.out.println("Connected to database");
         return true;
     }
 
@@ -106,9 +106,33 @@ public class Assignment2 extends JDBCSubmission {
         return name;
     }
 
+    // public static void main(String[] args) throws ClassNotFoundException {
     public static void main(String[] args) {
         // You can put testing code in here. It will not affect our autotester.
         System.out.println("Hello");
+
+        // Assignment2 test = new Assignment2();
+
+        // test.connectDB(
+        //     "jdbc:postgresql://localhost:5432/csc343h-kongzhao?currentSchema=parlgov", 
+        //     "kongzhao", "");
+
+        // // Test election sequence
+        // System.out.println("Test 1:");
+        // ElectionCabinetResult a = test.electionSequence("Canada");
+        // for(int i = 0; i < a.elections.size(); ++i) {
+        //     System.out.println("Election: " + a.elections.get(i) + " Cabinet: " + a.cabinets.get(i));
+        // }
+
+        // // Test findSimilarPoliticians
+        // List<Integer> b = test.findSimilarPoliticians(9, (float)0.0);
+        // System.out.println("Test 2:");
+        // for(int i : b) {
+        //     System.out.println(i);
+        // }
+
+        // test.disconnectDB();
+
     }
 
 }
