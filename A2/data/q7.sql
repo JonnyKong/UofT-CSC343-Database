@@ -22,7 +22,7 @@ CREATE VIEW pairs AS
 SELECT ER1.party_id AS p1, ER2.party_id AS p2, ER1.election_id, election.country_id
 FROM election_result ER1, election_result ER2, election
 WHERE ER1.election_id = ER2.election_id AND
-        (ER1.alliance_id = ER2.id OR ER1.id = ER2.alliance_id) AND
+        (ER1.alliance_id = ER2.id OR ER1.id = ER2.alliance_id OR ER1.alliance_id = ER2.alliance_id) AND
         ER1.election_id = election.id AND
         ER1.party_id < ER2.party_id
 GROUP BY(ER1.election_id, ER1.party_id, ER2.party_id, election.country_id);

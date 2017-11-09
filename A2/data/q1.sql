@@ -30,10 +30,10 @@ FROM election;
 
 -- Group result by each election
 CREATE VIEW groupedByElection AS
-SELECT MAX(e_date) AS e_date, country_id, party_id, COALESCE(((100 * SUM(votes)) / MAX(votes_total)), 0) AS vote_range
+SELECT MAX(e_date) AS e_date, country_id, party_id, COALESCE(((100::numeric * SUM(votes)) / MAX(votes_total)), 0) AS vote_range
 FROM election_result, election_full
 WHERE election_result.election_id = election_full.id
-	AND e_date >= '1996-01-01' AND e_date <= '2016-12-31'
+	AND e_date >= '1996-01-01' AND e_date <= '2017-01-01'
 GROUP BY election_full.id, country_id, party_id
 ORDER BY party_id;
 
@@ -56,6 +56,6 @@ SELECT groupedByYear.year AS year, country.name AS countryName,
 	WHEN groupedByYear.vote_range_avg > 30 AND groupedByYear.vote_range_avg <= 40 THEN '(30-40]'
 	ELSE '(40-100]'
 	END) AS voteRange,
-	party.name AS partyName
+	party.name_short AS partyName
 FROM groupedByYear, country, party
 WHERE groupedByYear.country_id = country.id AND groupedByYear.party_id = party.id;
