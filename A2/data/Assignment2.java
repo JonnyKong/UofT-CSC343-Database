@@ -95,7 +95,8 @@ public class Assignment2 extends JDBCSubmission {
             while(rs2.next()) {
                 double similarity = similarity(rs2.getString("description"), description);
                 if(similarity >= threshold) {
-                    name.add(rs2.getInt("id"));
+                    int id = rs2.getInt("id");
+                    if(id != politicianName) name.add(id);  // Do not add self
                 }
             }
         } catch (SQLException se) {
@@ -109,7 +110,7 @@ public class Assignment2 extends JDBCSubmission {
     // public static void main(String[] args) throws ClassNotFoundException {
     public static void main(String[] args) {
         // You can put testing code in here. It will not affect our autotester.
-        System.out.println("Hello");
+        // System.out.println("Hello");
 
         // Assignment2 test = new Assignment2();
 

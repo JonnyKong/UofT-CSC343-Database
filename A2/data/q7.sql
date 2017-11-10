@@ -8,8 +8,8 @@ drop table if exists q7 cascade;
 DROP TABLE IF EXISTS q7 CASCADE;
 CREATE TABLE q7(
         countryId INT, 
-        alliedParty1 INT, 
-        alliedParty2 INT
+        alliedPartyId1 INT, 
+        alliedPartyId2 INT
 );
 
 -- You may find it convenient to do this for each of the views
@@ -40,8 +40,8 @@ GROUP BY country_id;
 -- the answer to the query 
 insert into q7 
 SELECT pairs.country_id AS countryId, 
-        pairs.p1 AS alliedParty1, 
-        pairs.p2 AS alliedParty2
+        pairs.p1 AS alliedPartyId1, 
+        pairs.p2 AS alliedPartyId2
 FROM pairs, sum_elections
 WHERE pairs.country_id = sum_elections.country_id
 GROUP BY pairs.p1, pairs.p2, pairs.country_id, sum_elections.election_cnt
