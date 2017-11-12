@@ -43,7 +43,7 @@ FROM num_win RIGHT JOIN party ON num_win.party_id = party.id GROUP BY party.coun
 
 --Find the party that that have won three times the average number of winning elections of parties of the same country
 CREATE VIEW answer_party AS
-SELECT n.party_id ,c country_id FROM num_win n JOIN country_avg_win c ON n.country_id = c.country_id 
+SELECT n.party_id ,c.country_id FROM num_win n JOIN country_avg_win c ON n.country_id = c.country_id 
 WHERE 3*(c.average) < n.num_of_winning ;
 
 --Anwser except mostRecentlyWonElectionId and mostRecentlyWonElectionYear
