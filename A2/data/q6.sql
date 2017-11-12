@@ -26,7 +26,7 @@ FROM cabinet c1 JOIN cabinet c2 ON c1.id=c2. previous_cabinet_id AND c1.id > c2.
 
 -- Create a table as cabinet but with end date of each cabinet. For the most recent cabinet, set NULL for the endDate.
 CREATE VIEW with_end_time AS
-SELECT e.cabinet_id, c.country_id, c.start_date, e.endDate FROM cabinet c LEFT JOIN end_time e ON c.id = e.cabinet_id;
+SELECT c.cabinet_id, c.country_id, c.start_date, e.endDate FROM cabinet c LEFT JOIN end_time e ON c.id = e.cabinet_id;
 
 -- Create a table as with_end_time with the party id of the primary minister party of each cabinet
 CREATE VIEW with_party_prime_minister AS
