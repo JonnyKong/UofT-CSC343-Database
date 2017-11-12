@@ -42,5 +42,5 @@ FROM with_party_prime_minister w JOIN country c ON w.country_id = c.id ;
 -- As woth_country_name but from party id to party name
 insert into q6 
 
-SELECT w.countryName, w.cabinetId, w.startDate, w.endDate, w.party_id, p.name AS pmParty
+SELECT w.countryName, w.cabinetId, w.startDate, w.endDate,  p.name AS pmParty
 FROM with_country_name w JOIN party p ON w.party_id = p.id ;
