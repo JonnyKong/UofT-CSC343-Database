@@ -26,7 +26,7 @@ SELECT election_id,max(votes)AS max_vote FROM election_result GROUP BY election_
 
 --Find the party that wins the election for each election
 CREATE VIEW winner AS
-SELECT party.party_id,party.country_id, election_result.election_id
+SELECT party.id,party.country_id, election_result.election_id
 FROM (election_result NATURAL JOIN winner_vote )JOIN party ON party.id = election_result.party_id
 WHERE winner_vote.max_vote = election_result.votes ;
 
