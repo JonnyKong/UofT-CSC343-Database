@@ -24,7 +24,7 @@ DROP VIEW IF EXISTS intermediate_step CASCADE;
 CREATE VIEW winner_vote AS 
 SELECT election_id,max(votes)AS max_vote FROM election_result GROUP BY election_id ;
 
---Find the party that wins the election for each election
+ --Find the party that wins the election for each election
 CREATE VIEW winner AS
 SELECT party.id AS party_id,party.country_id, election_result.election_id
 FROM (election_result NATURAL JOIN winner_vote )JOIN party ON party.id = election_result.party_id
@@ -73,5 +73,5 @@ FROM ((SELECT winner.party_id, MAX(election.e_date) AS mostRecentlyWonElectionYe
 
 -- the answer to the query 
 insert into q2 
-SELECT a.countryName,a.partyName,a.partyFamily,a.wonElections, m.mostRecentlyWonElectionId,m.mostRecentlyWonElectionYear
+SELECT a.countryName,a.partyName,a.partyFamily,a.wonElections, m.mostRecentlyWonElectionId,m.cast(mostRecentlyWonElectionYear AS DATE)
 FROM answer_without_two_attributes a JOIN most_recent_won m ON a.party_id = m.party_id;
