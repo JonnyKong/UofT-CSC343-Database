@@ -20,21 +20,21 @@ DROP VIEW IF EXISTS intermediate_step CASCADE;
 -- Define views for your intermediate steps here.
 
 -- Create a table which includes end date of each cabinet(if it is not the most recent)
-CREATE end_time AS
+CREATE VIEW end_time AS
 SELECT c1.id AS cabinet_id,  c2.start_date AS endDate
 FROM cabinet c1, cabinet c2 ON c1.id=c2. previous_cabinet_id;
 
 -- Create a table as cabinet but with end date of each cabinet. For the most recent cabinet, set NULL for the endDate.
-CREATE with_end_time AS
+CREATE VIEW with_end_time AS
 SELECT * FROM cabinet NATURAL FULL JOIN end_time ;
 
 -- Create a table as with_end_time with the party id of the primary minister party of each cabinet
-CREATE with_party_prime_minister AS
+CREATE VIEW with_party_prime_minister AS
 SELECT w.country_id, w.id AS cabinetId, w.start_date AS startDate, w.endDate, c.party_id
 FROM with_end_time w, cabinet_party c ON w.cabinet_id = c.cabinet_id WHERE c.pm ;
 
 -- Create a table as with_party_prime_minister but from country id to country name
-CREATE with_country_name AS
+CREATE VIEW with_country_name AS
 SELECT c.name AS countryName, w.cabinetId, w.startDate, w.endDate, w.party_id
 FROM with_party_prime_minister w, country c ON w.country_id = c.id ;
 
