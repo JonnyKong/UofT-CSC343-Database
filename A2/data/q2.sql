@@ -47,9 +47,21 @@ SELECT n.party_id ,c country_id FROM num_win n JOIN country_avg_win c ON n.count
 WHERE 3*average < num_of_winning ;
 
 --Anwser except mostRecentlyWonElectionId and mostRecentlyWonElectionYear
+CREATE VIEW answer_without_five_attributes AS
+SELECT a.party_id,c.name AS countryName
+FROM answer_party a JOIN country c ON a.country_id=c.id;
+
+CREATE VIEW answer_without_four_attributes AS
+SELECT a.party_id, a.countryName, p.name AS partyName
+FROM answer_without_five_attributes a JOIN party p ON a.party_id=p.id;
+
+CREATE VIEW answer_without_three_attributes AS
+SELECT a.party_id,a.countryName, a.partyName, pf.family AS partyFamily
+FROM answer_without_four_attributes a JOIN party_family pf ON a.party_id=pf.party_id;
+
 CREATE VIEW answer_without_two_attributes AS
-SELECT a.party_id,c.name AS countryName, p.name AS partyName, pf.family AS partyFamily, num_of_winning AS wonElections
-FROM ((answer_party a JOIN country c ON a.country_id=c.id)JOIN party p ON a.party_id=p.id)JOIN party_family pf ON a.party_id=pf.party_id;
+SELECT a.party_id,a.countryName, a.partyName, a.partyFamily, n.num_of_winning AS wonElections
+FROM answer_without_three_attributes a JOIN num_win n ON a.party_id = n.party_id;
 
 --Find the most recentwon election for each party.
 CREATE VIEW most_recent_won AS
