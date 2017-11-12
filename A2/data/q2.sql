@@ -26,7 +26,7 @@ SELECT election_id,max(votes)AS max_vote FROM election_result GROUP BY election_
 
 --Find the party that wins the election for each election
 CREATE VIEW winner AS
-SELECT p.party_id,p.country_id, election_result.election_id
+SELECT party.party_id,party.country_id, election_result.election_id
 FROM (election_result NATURAL JOIN winner_vote )JOIN party ON party.id = election_result.party_id
 WHERE winner_vote.max_vote = election_result.votes ;
 
@@ -34,7 +34,7 @@ WHERE winner_vote.max_vote = election_result.votes ;
 CREATE VIEW num_win AS
 SELECT num.party_id, party.country_id, num.num_of_winning
 FROM(SELECT winner.party_id , count(party.country_id) AS num_of_winning 
-FROM winner  RIGHT JOIN party ON winner.party_id = party.id GROUP BY party_id )num  NATUTRAL LEFT JOIN party ;
+FROM winner  RIGHT JOIN party ON winner.party_id = party.id GROUP BY party_id )num  LEFT JOIN party ON party.id= num.party_id;
 
 --Find the average number of winning elections of each country
 CREATE VIEW country_avg_win AS
@@ -63,3 +63,4 @@ FROM ((SELECT winner.party_id, MAX(election.e_date) AS mostRecentlyWonElectionId
 insert into q2 
 SELECT a.countryName,a.partyName,a.partyFamily,a.wonElections, m.mostRecentlyWonElectionId,m.mostRecentlyWonElectionYear
 FROM answer_without_two_attributes a JOIN most_recent_won m ON a.party_id = m.party_id;
+     answer_without_two_attributes
