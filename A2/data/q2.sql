@@ -65,13 +65,13 @@ FROM answer_without_three_attributes a JOIN num_win n ON a.party_id = n.party_id
 
 --Find the most recentwon election for each party.
 CREATE VIEW most_recent_won AS
-SELECT recent.party_id,winner.election_id AS mostRecentlyWonElectionId, recent. mostRecentlyWonElectionYear
-FROM ((SELECT winner.party_id, MAX(election.e_date) AS mostRecentlyWonElectionYear
+SELECT recent.party_id,winner.election_id AS mostRecentlyWonElectionId, recent. mostRecentlyWonElectionDate
+FROM ((SELECT winner.party_id, MAX(election.e_date) AS mostRecentlyWonElectionDate
      FROM winner LEFT JOIN election ON winner.election_id = election.id 
      GROUP BY winner.party_id) recent JOIN winner ON recent.party_id = winner.party_id) 
-     JOIN election ON election.id = winner.election_id AND cast(recent.mostRecentlyWonElectionYear AS DATE) = election.e_date;
+     JOIN election ON election.id = winner.election_id AND cast(recent.mostRecentlyWonElectionDate AS DATE) = election.e_date;
 
--- the answer to the query 
+-- the answer to the query
 insert into q2 
-SELECT a.countryName,a.partyName,a.partyFamily,a.wonElections, m.mostRecentlyWonElectionId,m.cast(mostRecentlyWonElectionYear AS DATE)
+SELECT a.countryName,a.partyName,a.partyFamily,a.wonElections, m.mostRecentlyWonElectionId,EXTRACT(year FROM m.mostRecentlyWonElectionDate ) AS mostRecentlyWonElectionYear 
 FROM answer_without_two_attributes a JOIN most_recent_won m ON a.party_id = m.party_id;
