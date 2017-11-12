@@ -30,7 +30,7 @@ SELECT e.cabinet_id, c.country_id, c.start_date, e.endDate FROM cabinet c LEFT J
 
 -- Create a table as with_end_time with the party id of the primary minister party of each cabinet
 CREATE VIEW with_party_prime_minister AS
-SELECT w.country_id, w.id AS cabinetId, w.start_date AS startDate, w.endDate, c.party_id
+SELECT w.country_id, w.cabinet_id AS cabinetId, w.start_date AS startDate, w.endDate, c.party_id
 FROM with_end_time w LEFT JOIN cabinet_party c ON w.cabinet_id = c.cabinet_id WHERE c.pm ;
 
 -- Create a table as with_party_prime_minister but from country id to country name
