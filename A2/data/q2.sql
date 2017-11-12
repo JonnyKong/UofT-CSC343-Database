@@ -26,7 +26,7 @@ SELECT election_id,max(votes)AS max_vote FROM election_result GROUP BY election_
 
 --Find the party that wins the election for each election
 CREATE VIEW winner AS
-SELECT party.id,party.country_id, election_result.election_id
+SELECT party.id AS party_id,party.country_id, election_result.election_id
 FROM (election_result NATURAL JOIN winner_vote )JOIN party ON party.id = election_result.party_id
 WHERE winner_vote.max_vote = election_result.votes ;
 
@@ -49,7 +49,7 @@ WHERE 3*average < num_of_winning ;
 --Anwser except mostRecentlyWonElectionId and mostRecentlyWonElectionYear
 CREATE VIEW answer_without_two_attributes AS
 SELECT a.party_id,c.name AS countryName, p.name AS partyName, pf.family AS partyFamily, num_of_winning AS wonElections
-FROM ((anwser_party a JOIN country c ON a.country_id=c.id)JOIN party p ON a.party_id=p.id)JOIN party_family pf ON a.party_id=pf.party_id;
+FROM ((answer_party a JOIN country c ON a.country_id=c.id)JOIN party p ON a.party_id=p.id)JOIN party_family pf ON a.party_id=pf.party_id;
 
 --Find the most recentwon election for each party.
 CREATE VIEW most_recent_won AS
@@ -57,10 +57,9 @@ SELECT recent.party_id,winner.election_id AS mostRecentlyWonElectionId, recent. 
 FROM ((SELECT winner.party_id, MAX(election.e_date) AS mostRecentlyWonElectionId
      FROM winner LEFT JOIN election ON winner.election_id = election.id 
      GROUP BY winner.party_id) recent JOIN winner ON recent.party_id = winner.party_id) 
-     JOIN election_result ON election.id = winner.election_id AND r.mostRecentlyWonElectionId = election.e_date;
+     JOIN election_result ON election_result.election_id = winner.election_id AND r.mostRecentlyWonElectionId = election.e_date;
 
 -- the answer to the query 
 insert into q2 
 SELECT a.countryName,a.partyName,a.partyFamily,a.wonElections, m.mostRecentlyWonElectionId,m.mostRecentlyWonElectionYear
 FROM answer_without_two_attributes a JOIN most_recent_won m ON a.party_id = m.party_id;
-     answer_without_two_attributes
