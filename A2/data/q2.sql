@@ -38,7 +38,7 @@ FROM winner  RIGHT JOIN party ON winner.party_id = party.id GROUP BY party_id )n
 
 --Find the average number of winning elections of each country
 CREATE VIEW country_avg_win AS
-SELECT party.country_id, sum(num_win.num_of_winning)/count(party.id) AS average 
+SELECT party.country_id, (sum(num_win.num_of_winning)/count(party.id) )AS average 
 FROM num_win RIGHT JOIN party ON num_win.party_id = party.id GROUP BY party.country_id ;
 
 --Find the party that that have won three times the average number of winning elections of parties of the same country
@@ -69,7 +69,7 @@ SELECT recent.party_id,winner.election_id AS mostRecentlyWonElectionId, recent. 
 FROM ((SELECT winner.party_id, MAX(election.e_date) AS mostRecentlyWonElectionId
      FROM winner LEFT JOIN election ON winner.election_id = election.id 
      GROUP BY winner.party_id) recent JOIN winner ON recent.party_id = winner.party_id) 
-     JOIN election_result ON election_result.election_id = winner.election_id AND r.mostRecentlyWonElectionId = election.e_date;
+     JOIN election_result ON election_result.election_id = winner.election_id AND recent.mostRecentlyWonElectionId = election.e_date;
 
 -- the answer to the query 
 insert into q2 
