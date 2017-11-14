@@ -57,7 +57,7 @@ FROM answer_without_five_attributes a JOIN party p ON a.party_id=p.id;
 
 CREATE VIEW answer_without_three_attributes AS
 SELECT a.party_id,a.countryName, a.partyName, pf.family AS partyFamily
-FROM answer_without_four_attributes a JOIN party_family pf ON a.party_id=pf.party_id;
+FROM answer_without_four_attributes a LEFT JOIN party_family pf ON a.party_id=pf.party_id;
 
 CREATE VIEW answer_without_two_attributes AS
 SELECT a.party_id,a.countryName, a.partyName, a.partyFamily, n.num_of_winning AS wonElections
