@@ -44,6 +44,5 @@ FROM with_end_time w1 LEFT JOIN with_party_name_not_null w2 ON w1.cabinet_id = w
 --Create a table as with_party_prime_minister but from country id to country name
 insert into q6 
 
-CREATE VIEW with_country_name AS
-SELECT c.name AS countryName, w.cabinet_id, w.start_date, w.endDate, w.party_id
+SELECT c.name AS countryName, w.cabinet_id, w.start_date, w.endDate, w.name
 FROM with_party_prime_minister w JOIN country c ON w.country_id = c.id ;
