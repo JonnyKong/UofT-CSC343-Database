@@ -66,10 +66,9 @@ CREATE TABLE multi_hint (
 
 CREATE TABLE numeric_hint (
 	questionId INT REFERENCES question_bank(id) NOT NULL,
-	hint1 INT,
-	hint2 INT,
 	range1 INT NOT NULL,
 	range2 INT NOT NULL,
+	hint VARCHAR(128) NOT NULL,
 	CHECK(range1 < range2),
 	PRIMARY KEY(questionId, range1, range2)
 );
