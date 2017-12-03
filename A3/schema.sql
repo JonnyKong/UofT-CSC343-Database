@@ -37,7 +37,7 @@ CREATE TABLE quiz (
 );
 
 CREATE TABLE question_bank (
-	id INT PRIMARY KEY,k
+	id INT PRIMARY KEY,
 	questionText VARCHAR(256) NOT NULL,
 	questionType INT NOT NULL,
 	correctAns INT NOT NULL
@@ -53,7 +53,7 @@ CREATE TABLE student_quiz_answer (
 	studentId BIGINT REFERENCES student(id) NOT NULL,
 	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
 	questionId INT REFERENCES question_bank(id) NOT NULL,
-	answer INT NOT NULL
+	answer INT
 );
 
 CREATE TABLE multi_hint (
@@ -105,13 +105,17 @@ CREATE TRIGGER classes_t
 CREATE OR REPLACE FUNCTION take_f()
 	RETURNS trigger AS
 $take_t$
-DECLARE
-
 BEGIN
 	IF EXISTS(SELECT * FROM student, enroll, class, quiz 
-	WHERE student.id = enroll.studentId AND enroll.classId = class.id AND class.id = quiz.classId
-	AND student.id = New.studentId AND quiz.Id = New.quizId) THEN
+		WHERE student.id = enroll.studentId AND enroll.classId = class.id AND class.id = quiz.classId
+		AND student.id = New.studentId AND quiz.Id = New.quizId) 
+	AND EXISTS(SELECT * FROM quiz_question 
+		WHERE New.quizId = quiz_question.quizId AND New.questionId = quiz_question.questionId) THEN
 		RETURN NEW;
+	ELSIF NOT EXISTS(SELECT * FROM quiz_question 
+		WHERE New.quizId = quiz_question.quizId AND New.questionId = quiz_question.questionId) THEN
+		RAISE EXCEPTION 'Question not belonging to this quiz';
+		RETURN NULL;
 	ELSE
 		RAISE EXCEPTION 'Cannot answer quizzes in course not enrolled';
 		RETURN NULL;
