@@ -15,7 +15,7 @@ CREATE TABLE class (
 	teacher VARCHAR(64) NOT NULL
 );
 
-CREATE TABLE students (
+CREATE TABLE student (
 	id INT PRIMARY KEY,
 	-- The first name of the student
 	studentFirstName VARCHAR(32) NOT NULL,
@@ -24,12 +24,12 @@ CREATE TABLE students (
 );
 
 CREATE TABLE enroll (
-	studentId INT REFERENCES students(id) NOT NULL,
+	studentId INT REFERENCES student(id) NOT NULL,
 	classId INT REFERENCES class(id) NOT NULL
 );
 
 CREATE TABLE quiz (
-	id INT PRIMARY KEY,
+	id VARCHAR(32) PRIMARY KEY,
 	title VARCHAR(128) NOT NULL,
 	classId INT REFERENCES class(id),
 	dueTime DATE NOT NULL,
@@ -44,14 +44,14 @@ CREATE TABLE question_bank (
 );
 
 CREATE TABLE quiz_question (
-	quizId INT REFERENCES quiz(id) NOT NULL,
+	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
 	questionId INT REFERENCES question_bank(id) NOT NULL,
 	questionWeight NUMERIC NOT NULL
 );
 
 CREATE TABLE student_quiz_answer (
-	studentId INT REFERENCES students(id) NOT NULL,
-	quizId INT REFERENCES quiz(id) NOT NULL,
+	studentId INT REFERENCES student(id) NOT NULL,
+	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
 	questionId INT REFERENCES question_bank(id) NOT NULL,
 	answer INT NOT NULL
 );
@@ -82,3 +82,20 @@ LANGUAGE plpgsql;
 CREATE TRIGGER classes_t 
 	BEFORE INSERT OR UPDATE ON class
 	FOR EACH ROW EXECUTE PROCEDURE classes_f();
+
+-- Trigger to enforce a student answers a quiz belonging to a class he enrolled in
+CREATE OR REPLACE FUNCTION take_f()
+	RETURNS trigger AS
+$take_t$
+DECLARE
+
+BEGIN
+	IF EXISTS(SELECT * FROM student, enroll, class, quiz 
+		WHERE student.id = enroll.studentId AND enroll.classId = class.id AND class.id = quiz.classId
+		AND student.id = New.studentId)
+END;
+$take_t$
+LANGUAGE plpgsql;
+CREATE TRIGGER take_t
+	BEFORE INSERT OR UPDATE ON student_quiz_answer
+	FOR EACH ROW EXECUTE PROCEDURE take_f();
