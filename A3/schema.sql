@@ -16,7 +16,7 @@ CREATE TABLE class (
 );
 
 CREATE TABLE student (
-	id INT PRIMARY KEY,
+	id BIGINT PRIMARY KEY,
 	-- The first name of the student
 	studentFirstName VARCHAR(32) NOT NULL,
 	-- The last name of the student
@@ -24,7 +24,7 @@ CREATE TABLE student (
 );
 
 CREATE TABLE enroll (
-	studentId INT REFERENCES student(id) NOT NULL,
+	studentId BIGINT REFERENCES student(id) NOT NULL,
 	classId INT REFERENCES class(id) NOT NULL
 );
 
@@ -32,7 +32,7 @@ CREATE TABLE quiz (
 	id VARCHAR(32) PRIMARY KEY,
 	title VARCHAR(128) NOT NULL,
 	classId INT REFERENCES class(id),
-	dueTime DATE NOT NULL,
+	dueTime TIMESTAMP NOT NULL,
 	hint BOOLEAN NOT NULL
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE quiz_question (
 );
 
 CREATE TABLE student_quiz_answer (
-	studentId INT REFERENCES student(id) NOT NULL,
+	studentId BIGINT REFERENCES student(id) NOT NULL,
 	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
 	questionId INT REFERENCES question_bank(id) NOT NULL,
 	answer INT NOT NULL
@@ -91,8 +91,14 @@ DECLARE
 
 BEGIN
 	IF EXISTS(SELECT * FROM student, enroll, class, quiz 
-		WHERE student.id = enroll.studentId AND enroll.classId = class.id AND class.id = quiz.classId
-		AND student.id = New.studentId)
+	WHERE student.id = enroll.studentId AND enroll.classId = class.id AND class.id = quiz.classId
+	AND student.id = New.studentId AND quiz.Id = New.quizId) THEN
+		RETURN NEW;
+	ELSE
+		RAISE EXCEPTION 'Cannot answer quizzes in course not enrolled';
+		RETURN NULL;
+	END IF;
+	RETURN NEW;
 END;
 $take_t$
 LANGUAGE plpgsql;
