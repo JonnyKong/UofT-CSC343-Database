@@ -1,6 +1,6 @@
 INSERT INTO quizzes.question_bank VALUES
 (782,'What do you promise when you take the oath of citizenship?', 2, 1),
-(566,'The Prime Minister, Justin Trudeau, is Canada\'s Head of State.', 1, 2),
+(566,'The Prime Minister, Justin Trudeau, is Canada''s Head of State.', 1, 2),
 (601,'During the "Quiet Revolution," Quebec experienced rapid change. In what decade did this occur? 
       (Enter the year that began the decade, e.g., 1840.)', 3, 1960),
 (625,'What is the Underground Railroad?', 2, 4),
@@ -13,7 +13,7 @@ INSERT INTO quizzes.multi_hint VALUES
 (782,3, 'To pledge your allegiance to the flag and fulfill the duties of a Canadian', 'Think regally.'),
 (782,4, 'To pledge your loyalty to Canada from sea to sea', NULL),
 (625,1, 'The first railway to cross Canada', 'The Underground Railroad was generally south to gggg, not east-west.'),
-(625,2, 'The CPR\'s secret railway line', 'The Underground Railroad was secret, but it had nothing to do with trains.'),
+(625,2, 'The CPR''s secret railway line', 'The Underground Railroad was secret, but it had nothing to do with trains.'),
 (625,3, 'The TTC subway system', 'The TTC is relatively recent; the Underground Railroad was in operation over 100 years ago.'),
 (625,4, 'A network used by slaves who escaped the United States into Canada', NULL),
 (790,1, 'They attacked American merchant ships', NULL),
