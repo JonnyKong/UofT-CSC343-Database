@@ -37,7 +37,7 @@ CREATE TABLE quiz (
 );
 
 CREATE TABLE question_bank (
-	id INT PRIMARY KEY,
+	id INT PRIMARY KEY,k
 	questionText VARCHAR(256) NOT NULL,
 	questionType INT NOT NULL,
 	correctAns INT NOT NULL
@@ -54,6 +54,24 @@ CREATE TABLE student_quiz_answer (
 	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
 	questionId INT REFERENCES question_bank(id) NOT NULL,
 	answer INT NOT NULL
+);
+
+CREATE TABLE multi_hint (
+	questionId INT REFERENCES question_bank(id) NOT NULL,
+	choiceId INT NOT NULL,
+	mText VARCHAR(128) NOT NULL,
+	mHint VARCHAR(128),
+	PRIMARY KEY(questionId, choiceId)
+);
+
+CREATE TABLE numeric_hint (
+	questionId INT REFERENCES question_bank(id) NOT NULL,
+	hint1 INT,
+	hint2 INT,
+	range1 INT NOT NULL,
+	range2 INT NOT NULL,
+	CHECK(range1 < range2),
+	PRIMARY KEY(questionId, range1, range2)
 );
 
 -- Trigger to enforce a room have <=2 classes and same teacher
