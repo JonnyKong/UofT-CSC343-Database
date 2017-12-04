@@ -35,15 +35,16 @@ CREATE TABLE enroll (
 CREATE TABLE quiz (
 	id VARCHAR(32) PRIMARY KEY,
 	-- The title of the quiz
-	-- title VARCHAR(128) NOT NULL,
+	title VARCHAR(128) NOT NULL,
 	-- -- The class this quiz belongs to
-	classId INT REFERENCES class(id),
+	-- classId INT REFERENCES class(id),
 	-- The due time of this quiz
 	dueTime TIMESTAMP NOT NULL,
 	-- Whether hint is enabled for this quiz
 	hint BOOLEAN NOT NULL
 );
 
+-- A class can have many quizzes. A quiz can be in many classes
 CREATE TABLE have (
 	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
 	classId INT REFERENCES class(id) NOT NULL
