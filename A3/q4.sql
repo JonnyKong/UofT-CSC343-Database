@@ -1,3 +1,7 @@
+--Create the final answer in which find all unanswered questions
+--for a specific student in a specific quiz
+--As mensioned in our schema, the unanswered question is set to NULL
+--in the attribute 'answer' in the view 'student_quiz_answer'
 SELECT student_quiz_answer.studentId AS student_number,
 	student_quiz_answer.questionId AS question_id,
 	left(question_bank.questionText, 50) AS question_text
