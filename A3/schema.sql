@@ -35,13 +35,18 @@ CREATE TABLE enroll (
 CREATE TABLE quiz (
 	id VARCHAR(32) PRIMARY KEY,
 	-- The title of the quiz
-	title VARCHAR(128) NOT NULL,
-	-- The class this quiz belongs to
+	-- title VARCHAR(128) NOT NULL,
+	-- -- The class this quiz belongs to
 	classId INT REFERENCES class(id),
 	-- The due time of this quiz
 	dueTime TIMESTAMP NOT NULL,
 	-- Whether hint is enabled for this quiz
 	hint BOOLEAN NOT NULL
+);
+
+CREATE TABLE have (
+	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
+	classId INT REFERENCES class(id) NOT NULL
 );
 
 -- All questions are stored in a question bank
