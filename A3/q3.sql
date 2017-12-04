@@ -43,7 +43,7 @@ SELECT lpad(student.id::text, 10, '0') AS student_number,
 FROM remaining_id, student
 WHERE remaining_id.student_number = student.id;
 
---Create a final answer in which combine the two views in which students have nonzero scores and in which students have zero scores
+--Create the final answer in which combine the two views in which students have nonzero scores and in which students have zero scores
 (SELECT * FROM score)
 UNION
 (SELECT * FROM remaining_score);
