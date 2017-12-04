@@ -45,7 +45,7 @@ WHERE quizId = 'Pr1-220310'
 GROUP BY questionId
 LIMIT 1;
 
---Create a view in which combine the views of number of times with no given answer and number of times with correct
+--Create the final answer in which combine the views of number of times with no given answer and number of times with correct
 --answer and compute the number of times with wrong answer for a specific question
 --To compute the number of times with wrong answer simply use total number of student participate in the quiz minus the 
 --number of times with no given answers and the number of times with correct answer
