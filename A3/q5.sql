@@ -1,5 +1,5 @@
---First, create a view in which count the times of a specific question 
---that is not answered in a specific quiz
+--First, create a view in which count the number of times for
+--a specific question that is not answered in a specific quiz
 DROP TABLE IF EXISTS no_ans CASCADE;
 CREATE TABLE no_ans AS
 SELECT student_quiz_answer.questionId AS question_id,
@@ -14,8 +14,8 @@ WHERE student_quiz_answer.quizId = quiz.id AND
 	student_quiz_answer.answer IS NULL
 GROUP BY student_quiz_answer.questionId;
 
---Create a view in which count the times of a specific question 
---that is not answered in a specific quiz
+--Create a view in which count the number of times for a
+--specific question that is correctly answered in a specific quiz
 DROP TABLE IF EXISTS correct_ans CASCADE;
 CREATE TABLE correct_ans AS
 SELECT question_bank.id AS question_id,
@@ -33,7 +33,7 @@ WHERE student_quiz_answer.quizId = quiz.id AND
 	student_quiz_answer.answer = question_bank.correctAns
 GROUP BY question_bank.id;
 
---Create a view in which counts the number of the student that participate the specific quiz
+--Create a view in which count the number of student that participate in the specific quiz
 --Note in our schema, for a specific quiz, because for the question with no given answer we set it to NULL
 --the participants for each question is always the same
 --As a result, we use limit one
@@ -45,10 +45,10 @@ WHERE quizId = 'Pr1-220310'
 GROUP BY questionId
 LIMIT 1;
 
---Create a view in which combine the views of number of times with no given answer and answer of times with correct
---answer and compute the times with wrong answer for a specific question
---To compute the times with wrong answer simply use total number of student participate in the question minus the 
---number of times of no given answers and the number of times of correct answers
+--Create a view in which combine the views of number of times with no given answer and number of times with correct
+--answer and compute the number of times with wrong answer for a specific question
+--To compute the number of times with wrong answer simply use total number of student participate in the quiz minus the 
+--number of times with no given answers and the number of times with correct answer
 SELECT no_ans.question_id AS question_id,
 	correct_ans.count_correct_ans AS correct,
 	no_ans.count_no_ans AS no_ans,
