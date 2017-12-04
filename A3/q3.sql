@@ -34,7 +34,7 @@ EXCEPT
 (SELECT DISTINCT student_number::bigint
 FROM score);
 
---Create a view in which set the total grade of the people who has no any correct answer to zero
+--Create a view in which set the total grade of the student who has no any correct answer to zero
 DROP TABLE IF EXISTS remaining_score CASCADE;
 CREATE TABLE remaining_score AS
 SELECT lpad(student.id::text, 10, '0') AS student_number,
@@ -43,7 +43,7 @@ SELECT lpad(student.id::text, 10, '0') AS student_number,
 FROM remaining_id, student
 WHERE remaining_id.student_number = student.id;
 
---Create a final answer in which combine the two views of which is people with nonzero scores and which people with zero scores
+--Create a final answer in which combine the two views in which students have nonzero scores and in which students have zero scores
 (SELECT * FROM score)
 UNION
 (SELECT * FROM remaining_score);
