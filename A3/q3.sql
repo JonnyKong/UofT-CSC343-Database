@@ -1,4 +1,4 @@
---First create a view in which find the student id and last name of the people who has 
+--First create a view in which find the student id and last name of the students who have
 --at least one correct answer in the quiz and calculate their total grade of the quiz
 --by adding weight of the questions which they give correct answers
 DROP TABLE IF EXISTS score CASCADE;
@@ -25,7 +25,7 @@ WHERE student_quiz_answer.studentId = student.id AND
 	student_quiz_answer.answer = question_bank.correctAns
 GROUP BY student.id;
 
---Create a view in which find the student id of student who has no any correct answer
+--Create a view in which find the student id of students who have no any correct answer
 DROP TABLE IF EXISTS remaining_id CASCADE;
 CREATE TABLE remaining_id AS
 (SELECT DISTINCT studentId AS student_number
@@ -34,7 +34,7 @@ EXCEPT
 (SELECT DISTINCT student_number::bigint
 FROM score);
 
---Create a view in which set the total grade of the student who has no any correct answer to zero
+--Create a view in which set the total grade of the students who have no any correct answer to zero
 DROP TABLE IF EXISTS remaining_score CASCADE;
 CREATE TABLE remaining_score AS
 SELECT lpad(student.id::text, 10, '0') AS student_number,
