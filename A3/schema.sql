@@ -1,4 +1,13 @@
 -- Schema for storing running quizzes online
+-- In out schema, we try to enforce following constraints:
+-- 1\ each room can haveat most two coursesand at most one teacher;
+-- 2\ students can only take quizzes of the course that they enrolled;
+-- 3\ each question can have only one correct answer;
+-- 4\ the student number, room numer, quiz number and question number are unique.
+-- 5\ each quiz (define as exactly same combination of questions) can be take by more than one course
+
+-- And the following constaints we decide not to enforce:
+-- 1\each class should have at least one student
 
 DROP SCHEMA IF EXISTS quizzes CASCADE;
 CREATE SCHEMA quizzes;
