@@ -4,10 +4,9 @@ DROP TABLE IF EXISTS no_ans CASCADE;
 CREATE TABLE no_ans AS
 SELECT student_quiz_answer.questionId AS question_id,
 	COUNT(*) AS count_no_ans
-FROM student_quiz_answer, quiz, class, class_quiz
+FROM student_quiz_answer, quiz, class--, class_quiz
 WHERE student_quiz_answer.quizId = quiz.id AND
-	quiz.id = class_quiz.quizId AND
-	class_quiz.classId = class.id AND
+	quiz.classId = class.id AND
 	quiz.id = 'Pr1-220310' AND
 	class.grade = 8 AND
 	class.room = 120 AND
@@ -21,11 +20,11 @@ DROP TABLE IF EXISTS correct_ans CASCADE;
 CREATE TABLE correct_ans AS
 SELECT question_bank.id AS question_id,
 	COUNT(*) AS count_correct_ans
-FROM student_quiz_answer, quiz, class, class_quiz, quiz_question, question_bank
+FROM student_quiz_answer, quiz, class, --class_quiz, 
+	quiz_question, question_bank
 WHERE student_quiz_answer.quizId = quiz.id AND
 	student_quiz_answer.questionId = question_bank.id AND
-	quiz.id = class_quiz.quizId AND
-	class_quiz.classId = class.id AND
+	quiz.classId = class.id AND
 	quiz.Id = quiz_question.quizId AND
 	quiz_question.questionId = question_bank.id AND
 	quiz.id = 'Pr1-220310' AND

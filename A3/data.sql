@@ -34,11 +34,7 @@ INSERT INTO quizzes.class VALUES
 
 
 INSERT INTO quizzes.quiz VALUES
--- ('Pr1-220310','Citizenship Test Practise Questions', 1, '2017-10-01 13:30:00',TRUE);
-('Pr1-220310','Citizenship Test Practise Questions', '2017-10-01 13:30:00',TRUE);
-
-INSERT INTO quizzes.class_quiz VALUES
-('Pr1-220310', 1);
+('Pr1-220310','Citizenship Test Practise Questions', 1, '2017-10-01 13:30:00',TRUE);
 
 
 INSERT INTO quizzes.quiz_question VALUES

@@ -47,18 +47,12 @@ CREATE TABLE quiz (
 	id VARCHAR(32) PRIMARY KEY,
 	-- The title of the quiz
 	title VARCHAR(128) NOT NULL,
-	-- -- The class this quiz belongs to
-	-- classId INT REFERENCES class(id),
+	-- The class this quiz belongs to
+	classId INT REFERENCES class(id),
 	-- The due time of this quiz
 	dueTime TIMESTAMP NOT NULL,
 	-- Whether hint is enabled for this quiz
 	hint BOOLEAN NOT NULL
-);
-
--- A class can have many quizzes. A quiz can be in many classes
-CREATE TABLE class_quiz (
-	quizId VARCHAR(32) REFERENCES quiz(id) NOT NULL,
-	classId INT REFERENCES class(id) NOT NULL
 );
 
 -- All questions are stored in a question bank
@@ -156,10 +150,10 @@ CREATE OR REPLACE FUNCTION take_f()
 $take_t$
 BEGIN
 	-- If question student answered belongs to course he enrolled in 
-	IF EXISTS(SELECT * FROM student, enroll, class, quiz, class_quiz 
+	IF EXISTS(SELECT * FROM student, enroll, class, quiz--, class_quiz 
 		WHERE student.id = enroll.studentId AND enroll.classId = class.id AND
-		class.id = class_quiz.classId AND quiz.id = class_quiz.quizId AND
-		student.id = New.studentId AND quiz.Id = New.quizId) 
+		-- class.id = class_quiz.classId AND quiz.id = class_quiz.quizId AND
+		class.id = quiz.classId AND student.id = New.studentId AND quiz.Id = New.quizId) 
 	-- If this question belongs to this quiz
 	AND EXISTS(SELECT * FROM quiz_question 
 		WHERE New.quizId = quiz_question.quizId AND New.questionId = quiz_question.questionId) THEN

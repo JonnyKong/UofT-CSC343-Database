@@ -1,11 +1,10 @@
 csc343h-kongzhao=> \i runner.txt
 -- Loading schema and data:
-psql:schema.sql:3: NOTICE:  drop cascades to 18 other objects
+psql:schema.sql:14: NOTICE:  drop cascades to 17 other objects
 DETAIL:  drop cascades to table quizzes.class
 drop cascades to table quizzes.student
 drop cascades to table quizzes.enroll
 drop cascades to table quizzes.quiz
-drop cascades to table quizzes.class_quiz
 drop cascades to table quizzes.question_bank
 drop cascades to table quizzes.quiz_question
 drop cascades to table quizzes.student_quiz_answer
@@ -31,7 +30,6 @@ CREATE TABLE
 CREATE TABLE
 CREATE TABLE
 CREATE TABLE
-CREATE TABLE
 CREATE FUNCTION
 CREATE TRIGGER
 CREATE FUNCTION
@@ -40,7 +38,6 @@ INSERT 0 5
 INSERT 0 12
 INSERT 0 3
 INSERT 0 2
-INSERT 0 1
 INSERT 0 1
 INSERT 0 4
 INSERT 0 6
@@ -71,10 +68,10 @@ INSERT 0 20
 psql:q3.sql:4: NOTICE:  table "score" does not exist, skipping
 DROP TABLE
 SELECT 4
-psql:q3.sql:31: NOTICE:  table "remaining_id" does not exist, skipping
+psql:q3.sql:29: NOTICE:  table "remaining_id" does not exist, skipping
 DROP TABLE
 SELECT 1
-psql:q3.sql:40: NOTICE:  table "remaining_score" does not exist, skipping
+psql:q3.sql:38: NOTICE:  table "remaining_score" does not exist, skipping
 DROP TABLE
 SELECT 1
  student_number | last_name  | total_grade
@@ -101,10 +98,10 @@ SELECT 1
 psql:q5.sql:3: NOTICE:  table "no_ans" does not exist, skipping
 DROP TABLE
 SELECT 4
-psql:q5.sql:20: NOTICE:  table "correct_ans" does not exist, skipping
+psql:q5.sql:19: NOTICE:  table "correct_ans" does not exist, skipping
 DROP TABLE
 SELECT 4
-psql:q5.sql:42: NOTICE:  table "total_student_count" does not exist, skipping
+psql:q5.sql:41: NOTICE:  table "total_student_count" does not exist, skipping
 DROP TABLE
 SELECT 1
  question_id | correct | no_ans | incorrect

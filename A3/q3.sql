@@ -8,15 +8,13 @@ SELECT lpad(student.id::text, 10, '0') AS student_number,
 	SUM(quiz_question.questionWeight) AS total_grade
 FROM student_quiz_answer,
 	quiz,
-	class_quiz,
 	class,
 	student,
 	quiz_question,
 	question_bank
 WHERE student_quiz_answer.studentId = student.id AND
 	student_quiz_answer.quizId = quiz.Id AND
-	quiz.Id = class_quiz.quizId AND
-	class.Id = class_quiz.classId AND
+	quiz.classId = class.id AND
 	quiz.Id = quiz_question.quizId AND
 	quiz_question.questionId = question_bank.id AND
 	student_quiz_answer.questionId = question_bank.id AND
