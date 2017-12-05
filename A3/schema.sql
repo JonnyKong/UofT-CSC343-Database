@@ -1,3 +1,4 @@
+
 -- Schema for storing running quizzes online
 -- In out schema, we try to enforce following constraints:
 -- 1\ each room can haveat most two coursesand at most one teacher;
@@ -8,6 +9,7 @@
 
 -- And the following constaints we decide not to enforce:
 -- 1\each class should have at least one student
+-- 2\each multiple choice should have at least two choices and the answer should be one of them
 
 DROP SCHEMA IF EXISTS quizzes CASCADE;
 CREATE SCHEMA quizzes;
