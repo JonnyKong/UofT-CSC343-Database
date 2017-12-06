@@ -169,8 +169,30 @@ BEGIN
 	RETURN NEW;
 END;
 $take_t$
-LANGUAGE plpgsql;
+LANGUAGE plpgsql; 
 CREATE TRIGGER take_t
 	-- Check for this constraint upon a student answers a question
 	BEFORE INSERT OR UPDATE ON student_quiz_answer
 	FOR EACH ROW EXECUTE PROCEDURE take_f();
+
+
+-- Trigger to enforce a correct answer does not have hints
+CREATE OR REPLACE FUNCTION hint_f()
+	RETURNS trigger AS
+$hint_t$
+BEGIN
+	IF EXISTS(SELECT * FROM question_bank
+		WHERE question_bank.id = NEW.questionId 
+		AND question_bank.correctAns = NEW.choiceId
+		AND NEW.mHint IS NOT NULL) THEN
+		RAISE EXCEPTION 'Correct answer does not have hint';
+		RETURN NULL;
+	END IF;
+	RETURN NEW;
+END;
+$hint_t$
+LANGUAGE plpgsql; 
+CREATE TRIGGER hint_t
+	-- Check for this constraint upon inserting an multi_hint
+	BEFORE INSERT OR UPDATE ON multi_hint
+	FOR EACH ROW EXECUTE PROCEDURE hint_f();
