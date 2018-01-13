@@ -1,5 +1,6 @@
 # Databases
 ### This is the group project for the course "Introducion to Databases" from the University of Toronto.
+For more specific requirements for each assignment, refer to the assignment requirement PDF file within each assignment.
 
 ## Assignment 1: Relational Algebra
 * Read a new relational schema, and determine whether or not a particular instance is valid with respect to that schema.
